@@ -21,8 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1359CF712152AC6500D89666 /* ScribaTransparentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1359CF6F2152AC6500D89666 /* ScribaTransparentViewController.m */; };
-		1359CF722152AC6500D89666 /* ScribaTransparentViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1359CF702152AC6500D89666 /* ScribaTransparentViewController.h */; };
 		A5173D491D5FA69E00B3457B /* ScribaStylusDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = A5173D471D5FA69E00B3457B /* ScribaStylusDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A5173D4A1D5FA69E00B3457B /* ScribaStylusDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = A5173D481D5FA69E00B3457B /* ScribaStylusDevice.m */; };
 		A535DBA91C9B208D00FF56AF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A535DBA81C9B208D00FF56AF /* libz.tbd */; };
@@ -42,8 +40,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1359CF6F2152AC6500D89666 /* ScribaTransparentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScribaTransparentViewController.m; sourceTree = "<group>"; };
-		1359CF702152AC6500D89666 /* ScribaTransparentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScribaTransparentViewController.h; sourceTree = "<group>"; };
 		A5173D471D5FA69E00B3457B /* ScribaStylusDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScribaStylusDevice.h; sourceTree = "<group>"; };
 		A5173D481D5FA69E00B3457B /* ScribaStylusDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScribaStylusDevice.m; sourceTree = "<group>"; };
 		A535DBA81C9B208D00FF56AF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -81,8 +77,6 @@
 		A59B29631DBB67B900F0449F /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				1359CF702152AC6500D89666 /* ScribaTransparentViewController.h */,
-				1359CF6F2152AC6500D89666 /* ScribaTransparentViewController.m */,
 				A59B29641DBB68BD00F0449F /* ScribaActionNameView.h */,
 				A59B29651DBB68BD00F0449F /* ScribaActionNameView.m */,
 				A59B296C1DBB77DD00F0449F /* UIViewController+Utils.h */,
@@ -147,7 +141,6 @@
 				A5173D491D5FA69E00B3457B /* ScribaStylusDevice.h in Headers */,
 				A59B29661DBB68BD00F0449F /* ScribaActionNameView.h in Headers */,
 				A5EB0AEF1C9B16E400974416 /* CharacteristicReader.h in Headers */,
-				1359CF722152AC6500D89666 /* ScribaTransparentViewController.h in Headers */,
 				A5EB09D91C9AD12900974416 /* ScribaSDK.h in Headers */,
 				A5EB0AF11C9B16E400974416 /* ScribaBrushHelper.h in Headers */,
 				A59B296E1DBB77DD00F0449F /* UIViewController+Utils.h in Headers */,
@@ -246,7 +239,6 @@
 			files = (
 				A5EB0AF21C9B16E400974416 /* ScribaBrushHelper.m in Sources */,
 				A5EB0AF01C9B16E400974416 /* CharacteristicReader.m in Sources */,
-				1359CF712152AC6500D89666 /* ScribaTransparentViewController.m in Sources */,
 				A59B296F1DBB77DD00F0449F /* UIViewController+Utils.m in Sources */,
 				A59B29671DBB68BD00F0449F /* ScribaActionNameView.m in Sources */,
 				A5EB0AF61C9B16E400974416 /* ScribaStylusManager.m in Sources */,
