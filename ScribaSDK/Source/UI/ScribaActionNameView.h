@@ -4,7 +4,6 @@
 @interface ScribaActionNameView : UIView
 @property (nonatomic) UILabel *titleLabel;
 @property (nonatomic) UILabel *messageLabel;
-//@property (nonatomic) id<ScribaActionNameViewDelegate> delegate;
 
 + (ScribaActionNameView *) sharedInstance;
 
