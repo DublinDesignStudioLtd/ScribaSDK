@@ -102,9 +102,9 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     BOOL shouldStartScanningAfterBlouetoothOn;
     BOOL startToSingleClick;
     NSDate *startToSingleClickDate;
-//    NSTimer *pinReadTimer;
-//    NSTimer *batteryReadTimer;
-
+    //    NSTimer *pinReadTimer;
+    //    NSTimer *batteryReadTimer;
+    
     //moinitor device either broadcasting or dead (go slient)
     NSTimer *scribaDevicesMonitorTimer;
     
@@ -117,7 +117,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     NSMutableArray *lastPressureValues;
     NSMutableArray *lastClickValuesWithTime;
     
-    //battery services    
+    //battery services
     CBUUID *batteryServiceUUID;
     CBUUID *batteryLevelCharacteristicUUID;
     
@@ -192,13 +192,12 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
         lastPressureValuesForExtreams = [NSMutableArray new];
         lastClickValuesWithTime = [NSMutableArray new];
         
-        //        self.singleClickSpeed = 0.15;
-        self.doubleClickSpeed = 0.3;
-        self.thirdClickSpeed = 0.6;
+        self.doubleClickSpeed = 0.40;
+        self.thirdClickSpeed = 0.65;
         //        self.clickFiltherEnabled = NO;
         
-        self.firstClickDuration = 0.6;
-        self.doubleClickDuration = 0.85;
+        self.firstClickDuration = 0.65;
+        self.doubleClickDuration = 0.95;
         self.tripleClickDuration = 1.0;
         
         self.bottomRangeMargin = 0.15;
@@ -223,7 +222,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
         
         Legacy_DFU_ServiceUUID = [CBUUID UUIDWithString:buzzer_ServiceUUIDString];
         Buzzer_Characteristic_UUID = [CBUUID UUIDWithString:buzzerCharacteristicUUIDString];
-
+        
         dispatch_queue_t centralQueue = dispatch_queue_create("com.scriba.ScribaSDK", DISPATCH_QUEUE_SERIAL);
         self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:centralQueue options:@{CBCentralManagerOptionShowPowerAlertKey:[NSNumber numberWithBool:NO]}];
         
@@ -287,7 +286,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
 {
     ScribaStylusDevice* scribaStylusDevice = [[ScribaStylusDevice alloc] init];
     scribaStylusDevice.peripheral = peripheral;
-
+    
     return scribaStylusDevice;
 }
 
@@ -312,7 +311,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
                 else
                 {
                     NSTimeInterval diff = -[broadcastingDate timeIntervalSinceNow];
-//                    NSLog(@"diff %f , and broadcasting time %@",diff,[broadcastingDate description]);
+                    //                    NSLog(@"diff %f , and broadcasting time %@",diff,[broadcastingDate description]);
                     if (diff > 1)
                     {
                         //device should be removed since it is dead (not in broadcasting)
@@ -325,7 +324,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     
     for (ScribaStylusDevice *item in devicesToBeRemoved) {
         [self.devices removeObject:item];
-
+        
         //invoke delegate callback
         if([self.delegate respondsToSelector:@selector(didFoundDevices:)]){
             [self.delegate didFoundDevices:self.devices];
@@ -348,15 +347,15 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
         //Filter for "scriba"
         if(advertisingName && [advertisingName.lowercaseString rangeOfString:@"scriba"].location != NSNotFound){
             
-//            discovered scriba: {
-//                kCBAdvDataIsConnectable = 1;
-//                kCBAdvDataLocalName = "Scriba V2.00";
-//                kCBAdvDataServiceUUIDs =     (
-//                                              "Heart Rate",
-//                                              Battery,
-//                                              "Device Information"
-//                                              );
-//            }, peripheral name D2FA5C60-B5DD-4D9B-9EC1-9BF1157E45A8
+            //            discovered scriba: {
+            //                kCBAdvDataIsConnectable = 1;
+            //                kCBAdvDataLocalName = "Scriba V2.00";
+            //                kCBAdvDataServiceUUIDs =     (
+            //                                              "Heart Rate",
+            //                                              Battery,
+            //                                              "Device Information"
+            //                                              );
+            //            }, peripheral name D2FA5C60-B5DD-4D9B-9EC1-9BF1157E45A8
             
             //NSLog(@"discovered scriba: %@, peripheral name %@", advertisementData, peripheral.identifier);
             
@@ -377,10 +376,10 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
                     [self.delegate didFoundDevices:self.devices];
                 }
             }
-//            else
-//            {
-//                device = [self.devices objectAtIndex:[self.devices indexOfObject:device]];
-//            }
+            //            else
+            //            {
+            //                device = [self.devices objectAtIndex:[self.devices indexOfObject:device]];
+            //            }
             
             NSDate *nowDate = [NSDate dateWithTimeIntervalSinceNow:0];
             [self.devicesStatusDict setValue:nowDate forKey:peripheral.identifier.UUIDString];
@@ -391,12 +390,12 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
         }
     }
     else{
-         //NSLog(@"can not connectable wrong device name: %@ ", peripheral.identifier);
+        //NSLog(@"can not connectable wrong device name: %@ ", peripheral.identifier);
     }
 }
 
 - (NSMutableArray*)scribaDevicesListcontainPeriphal:(CBPeripheral*)peripheral{
-
+    
     NSMutableArray *retVal = [[NSMutableArray alloc] initWithArray:self.devices];
     for (int index = 0; index < self.devices.count; index++) {
         ScribaStylusDevice *device = self.devices[index];
@@ -405,7 +404,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
             break;
         }
     }
-
+    
     return retVal;
 }
 
@@ -437,25 +436,25 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     
     [self.bluetoothManager connectPeripheral:device.peripheral options:nil];
     
-//    NSInteger delay = 1.8;
-//
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//
-//        //called after 1.5 seconds to determine if connection is successful or not
-//        if (self.connectedDevice == nil || self.connectedDevice != device) {
-//
-//            [self.bluetoothManager cancelPeripheralConnection:device.peripheral];
-//
-//            NSError *error = [NSError errorWithDomain:kScribaErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"Could not connect to the Scriba device, you have to active it"}];
-//
-//            if (completionBlock)
-//            {
-//                completionBlock(error);
-//                completionBlock = nil;
-//            }
-//
-//        }
-//    });
+    //    NSInteger delay = 1.8;
+    //
+    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //
+    //        //called after 1.5 seconds to determine if connection is successful or not
+    //        if (self.connectedDevice == nil || self.connectedDevice != device) {
+    //
+    //            [self.bluetoothManager cancelPeripheralConnection:device.peripheral];
+    //
+    //            NSError *error = [NSError errorWithDomain:kScribaErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"Could not connect to the Scriba device, you have to active it"}];
+    //
+    //            if (completionBlock)
+    //            {
+    //                completionBlock(error);
+    //                completionBlock = nil;
+    //            }
+    //
+    //        }
+    //    });
     
 }
 
@@ -470,7 +469,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     {
         self.blueToothState = WDBlueToothOff;
     }
-
+    
     [self.bluetoothDelegate bluetoothStatusChanged:self.blueToothState];
     
     if (restoreLastDeviceConnectionWaitingForUpdate)
@@ -508,7 +507,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
             [self.devices addObject:self.connectedDevice];
         }
     }
-
+    
     self.connectedDevice.state = ScribaDeviceStateConnected;
     
     //save scriba device UUID string
@@ -525,7 +524,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     if (disconnectedDevice) {
         
         temporaryDisconnectedDevice = disconnectedDevice;
-
+        
         //should disconnect this device
         [self disconnectScribaDeviceCompletion:temporaryDisconnectedDevice completion:^(NSError *error) {
             if (error) {
@@ -536,14 +535,14 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     
     // Scanner uses other queue to send events. We must edit UI in the main queue
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        
         if ([self.delegate respondsToSelector:@selector(didConnectedDevice: manager:)]) {
             
             if (self.alertUserWhenScribaConnectionChanged)
             {
                 [[ScribaActionNameView sharedInstance] setConnectedDeviceName:peripheral.name inViewController:[UIViewController currentViewController]];
             }
-
+            
             [self.delegate didConnectedDevice:self.connectedDevice manager:self.bluetoothManager];
         }
         
@@ -562,7 +561,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
 -(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
     self.connectedDevice = nil;
-
+    
     // Scanner uses other queue to send events. We must edit UI in the main queue
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -700,7 +699,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     }
     else
     {
-//        NSLog(@"other service UUID = %@",service.UUID.UUIDString);
+        //        NSLog(@"other service UUID = %@",service.UUID.UUIDString);
     }
     
 }
@@ -743,10 +742,10 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
             
             NSLog(@"HR location: %@", [self decodeHRLocation:characteristic.value]);
         }
-//        else if([characteristic.UUID isEqual:HR_Buzzer_Characteristic_UUID]){
-//            
-//            NSLog(@"Buzzer %@",characteristic.value);
-//        }
+        //        else if([characteristic.UUID isEqual:HR_Buzzer_Characteristic_UUID]){
+        //
+        //            NSLog(@"Buzzer %@",characteristic.value);
+        //        }
         
     });
 }
@@ -820,21 +819,27 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
         //clicks is supposed to be starting from value less than 0.5
         startToSingleClick = YES;
         startToSingleClickDate = [NSDate dateWithTimeIntervalSinceNow:0];
-
+        //        NSLog(@"click counter ==== ====== 0");
+    }
+    else{
+        //        NSLog(@"click counter ==== ====== %d",clickCounter);
     }
     //NSLog(@" check clicks clicks %ld, %f ",clickCounter,value);
     //NSLog(@"value %f  , clickCounter = %l",value,clickCounter);
-
+    
     BOOL isFullDepresion = value >= 0.97;
     if(!isFullDepresion && wasPreviousReadindFullDepression)
     {
         if(previousClickTime != nil && ([previousClickTime timeIntervalSinceNow] >= -self.thirdClickSpeed))
         {
+            //            NSLog(@"click counter xxxxxx >>>> %d",clickCounter);
+            
             clickCounter++;
             
             if (clickCounter == 2) {
                 alreadyReportedSingleClick = NO;
                 alreadyReportedDoubleClick = YES;
+                NSLog(@" clickCounter == 2 , clickCounter == 2 ");
             }
             else if(clickCounter == 3){
                 alreadyReportedSingleClick = NO;
@@ -842,7 +847,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
                 clickCounter = 0;
                 
                 NSTimeInterval diffs = -[startToSingleClickDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceNow:0]];
-                //NSLog(@"diffs %f , tripleClickDuration %f",diffs,self.tripleClickDuration);
+                NSLog(@"diffs %f , tripleClickDuration %f",diffs,self.tripleClickDuration);
                 if([self.delegate respondsToSelector:@selector(didTrippleClickWithDevice:)] && startToSingleClick && diffs <= self.tripleClickDuration)
                 {
                     NSLog(@" triple clicks ");
@@ -851,13 +856,17 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
                 
                 startToSingleClick = NO;
             }
+            else{
+                clickCounter = 0;
+            }
         }
         else
         {
+            //            NSLog(@"click counter 000000000 >>>> %d",clickCounter);
+            
             clickCounter = 1;
             alreadyReportedSingleClick = YES;
-//            NSTimeInterval diffs = -[self->startToSingleClickDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceNow:0]];
-            //NSLog(@"testing single clicks %f",diffs);
+            
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.doubleClickSpeed * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
                 if(self->alreadyReportedSingleClick)
@@ -865,7 +874,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
                     self->alreadyReportedSingleClick = NO;
                     self->alreadyReportedDoubleClick = NO;
                     self->clickCounter = 0;
-
+                    
                     NSTimeInterval diffs = -[self->startToSingleClickDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceNow:0]];
                     NSLog(@"diffs %f , singleClickDuration %f",diffs,self.firstClickDuration);
                     if ([self.delegate respondsToSelector:@selector(didSingleClickWithDevice:)] && self->startToSingleClick  && diffs <= self.firstClickDuration)
@@ -896,7 +905,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
                     }
                     
                     self->startToSingleClick = NO;
-
+                    
                 }
             });
         }
@@ -912,6 +921,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
             
             //if full press takes more than double click speed time, set the fullDepression to YES.
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.doubleClickSpeed * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
                 if (self->clickCounter == 0)
                 {
                     self->fullDepressionInvalid = YES;
@@ -968,7 +978,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     
     __block float finalSmoothedValue = sum/lastPressureValues.count;
     
-     [self checkClicksWithValue:finalSmoothedValue];
+    [self checkClicksWithValue:finalSmoothedValue];
     
     if (finalSmoothedValue != self.currentDeviceButtonDepression)
     {
@@ -980,7 +990,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
         }
         
         [self reportSqueezeZoneDepression:finalSmoothedValue];
-
+        
     }
     
     //lock checks
@@ -997,7 +1007,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     {
         if(!smartLockedPressure){
             
-//            NSLog(@"final value %f",finalValue);
+            //            NSLog(@"final value %f",finalValue);
             
             [lastPressureValuesForLock addObject:@(finalValue)];
             while (lastPressureValuesForLock.count > numberOfLastValuesToCheckForLock) {
@@ -1076,7 +1086,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     if (!smartLockedPressure) {
         self.currentDeviceButtonDepression = [self calculatePressureValue:finalValue];
         
-//        self.currentDeviceButtonDepression = [self calculatePressureValue:finalSmoothedValue];
+        //        self.currentDeviceButtonDepression = [self calculatePressureValue:finalSmoothedValue];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:WDSizeChangedNotification object:@([ScribaBrushHelper sizeForPressureInPixel:self.currentDeviceButtonDepression])];
@@ -1101,9 +1111,9 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
 //Zone 4 - Full depress. This zone also allows a degree of tolerance for incomplete full squeezes.
 -(void)reportSqueezeZoneDepression:(float)depression{
     
-//    if (clickCounter > 0) {
-//        return;
-//    }
+    //    if (clickCounter > 0) {
+    //        return;
+    //    }
     
     NSInteger squeezeZone;
     if(depression >= 0.0 && depression < 0.1){
@@ -1128,7 +1138,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
             [self.delegate didChangedSqueezeZoneForDevice:self.connectedDevice squeezeZone:squeezeZone];
         }
     }
-
+    
     //    When the squeeze transitions between Zone 1 and Zone 2 (in both directions)
     //    When the squeeze transitions between Zone 2 and Zone 3 (in both directions)
     //only make buzz if enabled
@@ -1236,14 +1246,14 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
 
 -(void)restoreLastDeviceConnection{
     
-//    restoreLastDeviceConnectionWaitingForUpdate = true;
+    //    restoreLastDeviceConnectionWaitingForUpdate = true;
     
     if (self.blueToothState == WDBlueToothOff) {
         return;
     }
-
+    
     if (!temporaryDisconnectedDevice) {
-
+        
         ScribaStylusDevice *scribaDevice = [self retrieveLastScribaDevice];
         if (scribaDevice)
         {
@@ -1267,17 +1277,17 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     {
         return;
     }
-
+    
     NSDate *nowDate = [NSDate dateWithTimeIntervalSinceNow:0];
     
     [self.devicesStatusDict setValue:nowDate forKey:[temporaryDisconnectedDevice getScribaDeviceIdentifier].UUIDString];
-
+    
     [self tryConnectDevice:temporaryDisconnectedDevice completion:nil];
     
     if([self.delegate respondsToSelector:@selector(didFoundDevices:)]){
         [self.delegate didFoundDevices:self.devices];
     }
-
+    
 }
 
 #pragma mark - oberserver
@@ -1303,7 +1313,7 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
     {
         buzzNum = BuzzTypeOnce;
     }
-
+    
     double delay = 0.2;
     
     for (int count = 0; count < buzzNum; count++)
@@ -1317,8 +1327,8 @@ static NSString * const uartRXCharacteristicUUIDString = @"6E400002-B5A3-F393-E0
 - (void)doBuzz
 {
     ///uint8_t val = 04;
-//    NSData* valData = [NSData dataWithBytes:(void*)&val length:sizeof(val)];
-//    [self.connectedDevice.peripheral writeValue:valData forCharacteristic:buzzChacteristic type:CBCharacteristicWriteWithResponse];
+    //    NSData* valData = [NSData dataWithBytes:(void*)&val length:sizeof(val)];
+    //    [self.connectedDevice.peripheral writeValue:valData forCharacteristic:buzzChacteristic type:CBCharacteristicWriteWithResponse];
     
     [self.connectedDevice.peripheral setNotifyValue:YES forCharacteristic:buzzChacteristic];
 }
