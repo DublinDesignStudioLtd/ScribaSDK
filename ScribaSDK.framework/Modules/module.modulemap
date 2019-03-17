@@ -1,0 +1,6 @@
+framework module ScribaSDK {
+  umbrella header "ScribaSDK.h"
+
+  export *
+  module * { export * }
+}

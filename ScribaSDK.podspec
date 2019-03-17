@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "ScribaSDK"
-  s.version      = "1.5"
+  s.version      = "1.6"
   s.summary      = "An iOS SDK to enable apps to access all the functionality of the Scriba stylus, a radical new stylus design for mobile devices"
 
   # This description is used to generate tags and improve search results.
@@ -89,7 +89,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-   s.source       = { :git => "https://github.com/DublinDesignStudioLtd/ScribaSDK.git", :tag => "#{s.version}" }
+   s.source       = { :git => "https://github.com/DublinDesignStudioLtd/ScribaSDK.git", :tag => s.version }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -101,7 +101,7 @@ Pod::Spec.new do |s|
   #
 
   #  Classes", "Classes/**/*.{h,m}"
-  s.source_files  = "ScribaSDK/**/*.{h,m}"
+  # s.source_files  = "ScribaSDK/**/*.{h,m}"
   #s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
@@ -132,7 +132,7 @@ Pod::Spec.new do |s|
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
-
+  s.ios.vendored_frameworks = "ScribaSDK.framework"
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
